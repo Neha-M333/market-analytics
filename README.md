@@ -72,10 +72,10 @@ The Nifty 50 and the S&P 500 show a daily return correlation of only 0.19, risin
 | | P/E | ROE | Debt / equity | Equity multiplier |
 |---|---|---|---|---|
 | TCS | 15.1 | 45.9% | 0.11 | 1.7 |
-| HDFC Bank | 15.4 | 13.0% | n/a (bank) | 8.4 |
-| Reliance | 21.9 | 8.9% | 0.44 | 2.4 |
+| HDFC Bank | 15.1 | 13.0% | n/a (bank) | 8.4 |
+| Reliance | 21.3 | 8.9% | 0.44 | 2.4 |
 
-- TCS combines the highest ROE with the lowest leverage and the lowest P/E of the three.
+- TCS combines the highest ROE (45.9%) with the lowest leverage, at a P/E (15.1) about equal to HDFC Bank's and well below Reliance's (21.3).
 - **Banks are not ranked on debt/equity.** A bank funds itself with customer deposits, so debt/equity is not meaningful for HDFC Bank; it is compared on equity multiplier (total assets / equity) instead, and ranked only on ROE.
 - P/E is the vendor's trailing figure as of 8 Oct 2026. ROE and leverage are computed from the fiscal year ended 31 Mar 2026, using year-end equity.
 
