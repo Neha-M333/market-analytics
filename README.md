@@ -4,7 +4,7 @@ A dashboard that puts equities, commodities, currency, crypto and bonds on one r
 
 Built with **Python, SQLite (SQL), pandas, yfinance and Streamlit**. Author: Neha.
 
-![Risk & Return tab](docs/risk_return.png)
+![Dashboard walkthrough](docs/GIF.gif)
 
 ---
 
@@ -37,6 +37,23 @@ Five years of daily prices, adjusted for splits and dividends (window: 8 Oct 202
 4. **Stock Fundamentals:** P/E, ROE and leverage for TCS, HDFC Bank and Reliance, with a SQL ranking.
 5. **Data Health:** results of the automated data-quality checks.
 
+## Screenshots
+
+**Asset Class Overview**
+![Asset Class Overview](docs/overview.png)
+
+**Risk & Return**
+![Risk & Return](docs/risk_return.png)
+
+**Correlation (weekly returns)**
+![Correlation, weekly returns](docs/correlation_weekly.png)
+
+**Stock Fundamentals: banks are compared on equity multiplier, not debt/equity**
+![Stock Fundamentals](docs/fundamentals.png)
+
+**Data Health: each large move is either explained or flagged for review**
+![Data Health](docs/data_health.png)
+
 ## Insights
 
 All figures below come from this project's own output for 8 Oct 2021 to 8 Oct 2026.
@@ -66,8 +83,8 @@ The Nifty 50 and the S&P 500 show a daily return correlation of only 0.19, risin
 
 - **SQL checked against pandas.** The average daily return for gold matches exactly (0.07486%). The 30-day volatility differs by the expected factor of sqrt(29/30): 19.46% in SQL (population standard deviation) against 19.80% in pandas (sample standard deviation).
 - **Unit tests** cover maximum drawdown, volatility and CAGR on hand-calculated cases (`tests/test_metrics.py`). The drawdown function also reproduces the troughs of known market events (S&P 500 in October 2022, Bitcoin in November 2022).
-- **Automated checks** (`checks.py`) test for stale data, date gaps, flat prices and large daily moves, and write the results to a `data_quality` table that the dashboard reads. The run found no stale data, gaps or flat prices, and flagged 10 large daily moves. Five are annotated with the event behind them and five are still marked `review`. The 8 April 2026 oil drop (-16.4%) was confirmed against a second source: a news report gave the same closing price for the May WTI contract that is stored in the database, and a persistence test showed the price stayed at the new level rather than snapping back.
-- **HDFC Bank reconciliation.** Vendor statement equity (about Rs 8.17 trillion) and total assets (about Rs 52.6 trillion) disagreed with the bank's audited FY26 consolidated results (shareholders' equity Rs 5.86 trillion, total assets Rs 49.1 trillion). I used the audited figures and documented the override in `config.py`, with the source recorded in the `fundamentals` table. My first attempt used total equity including minority interest and understated ROE, because it did not match the profit measure (profit after minority interest). The corrected ROE is 13.0% on year-end equity and 13.7% on average equity, consistent with the vendor's own 13.8%.
+- **Automated checks** (`checks.py`) test for stale data, date gaps, flat prices and large daily moves, and write the results to a `data_quality` table that the dashboard reads. The run found no stale data, gaps or flat prices, and flagged 10 large daily moves. Five are annotated with the event behind them, and each was checked against news reports of a move of the same size and direction: the Omicron sell-off (26 Nov 2021, WTI -13.1%), the UAE comments on OPEC output (9 Mar 2022, WTI about -12%), the HDFC Ltd merger announcement (4 Apr 2022, HDFC Bank about +10%), the US-Iran ceasefire announcement (8 Apr 2026, WTI -16.4%) and Iran declaring the Strait of Hormuz open (17 Apr 2026, WTI about -11.4%). For 8 April 2026 the closing price in the database also matches the reported May WTI close, and a persistence test showed the price stayed at the new level instead of snapping back. The other five flagged moves (four oil, one gold) are still marked `review` because I have not matched them to a cause.
+- **HDFC Bank reconciliation.** Vendor statement equity (about Rs 8.17 trillion) and total assets (about Rs 52.6 trillion) disagreed with the bank's audited FY26 consolidated results (shareholders' equity Rs 5.86 trillion, total assets Rs 49.1 trillion). I used the audited figures and documented the override in `config.py`, with the source recorded in the `fundamentals` table. The filing is saved in [`docs/`](docs/financial-results-for-the-quarter-and-year-ended-March-31-2026.pdf). My first attempt used total equity including minority interest and understated ROE, because it did not match the profit measure (profit after minority interest). The corrected ROE is 13.0% on year-end equity and 13.7% on average equity, consistent with the vendor's own 13.8%.
 - **Null-safe ranking.** An early version of the ROE/leverage ranking gave missing values the best rank, because SQLite sorts `NULL` first. The query now ranks only real values.
 
 ## Assumptions and limitations
@@ -91,6 +108,7 @@ market-analytics/
 ├── metrics.py           # CAGR, volatility, Sharpe, drawdown, correlation
 ├── checks.py            # automated data-quality checks
 ├── app.py               # Streamlit dashboard (5 tabs)
+├── docs/                # screenshots, demo GIF, HDFC Bank FY26 results filing
 ├── tests/               # unit tests
 └── scripts/             # one-off investigation and verification scripts
 ```
