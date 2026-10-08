@@ -1,7 +1,7 @@
 import sqlite3
 import pandas as pd
-from config import DB_PATH
 from metrics import get_prices, get_returns
+from config import DB_PATH, KNOWN_EVENTS
 
 DEFAULT_JUMP = 0.10                 # flag daily moves above 10%
 JUMP_OVERRIDE = {"BTC-USD": 0.20}   # crypto is naturally more volatile
@@ -32,8 +32,12 @@ def check_jumps(returns):
         limit = JUMP_OVERRIDE.get(a, DEFAULT_JUMP)
         r = returns[a].dropna()
         for d, v in r[r.abs() > limit].items():
-            out.append(issue("large_move", a, d.date(),
-                             f"{v:+.1%} in one day (limit {limit:.0%})", "review"))
+            detail = f"{v:+.1%} in one day (limit {limit:.0%})"
+            note = KNOWN_EVENTS.get((a, str(d.date())))
+            if note:
+                out.append(issue("large_move", a, d.date(), f"{detail} - {note}", "explained"))
+            else:
+                out.append(issue("large_move", a, d.date(), detail, "review"))
     return out
 
 
