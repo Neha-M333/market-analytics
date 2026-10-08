@@ -73,7 +73,7 @@ def load_fundamentals(con):
             "fiscal_year_end": str(eq_date.date()) if eq_date is not None else None,
             "source": source,
             "as_of": pd.Timestamp.today().date().isoformat(),
-        })
+        })  
     pd.DataFrame(rows).to_sql("fundamentals", con, if_exists="replace", index=False)
 
 if __name__ == "__main__":
