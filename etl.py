@@ -57,14 +57,17 @@ def load_fundamentals(con):
         source = "statements (roe, leverage); info (pe, market_cap)"
         if t in OVERRIDES:
             ov = OVERRIDES[t]
-            net_income, equity, source = ov["net_income"], ov["equity"], ov["source"]
+            net_income = ov["net_income"]
+            equity = ov["equity"]
+            assets = ov.get("assets", assets)
+            source = ov["source"]
 
         rows.append({
             "asset": t,
             "pe": info.get("trailingPE"),
             "market_cap": info.get("marketCap"),
             "roe": net_income / equity if net_income and equity else None,
-            "debt_to_equity": debt / equity if debt is not None and equity else None,
+            "debt_to_equity": None if t in BANKS else (debt / equity if debt is not None and equity else None),
             "equity_multiplier": assets / equity if assets and equity else None,
             "is_bank": int(t in BANKS),
             "fiscal_year_end": str(eq_date.date()) if eq_date is not None else None,

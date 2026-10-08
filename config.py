@@ -15,14 +15,16 @@ DB_PATH = "market.db"
 PERIOD = "5y"
 BANKS = ["HDFCBANK.NS"]
 
-# Company-reported figures that replace vendor statement data where we found a discrepancy.
-# Values in INR (full units).
+# Company-reported figures replacing vendor statement data where we found a discrepancy.
+# Values in INR (1 crore = 10,000,000). Source: HDFC Bank audited consolidated results,
+# quarter and year ended March 31, 2026 (Board approved April 18, 2026).
 OVERRIDES = {
     "HDFCBANK.NS": {
-        "net_income": 760_260_000_000,   # consolidated PAT FY26 - confirm attributable-to-owners figure
-        "equity":     6_084_440_000_000, # consolidated net worth FY26
-        "source": "company-reported FY26 consolidated results (hdfcbank.com); "
-                  "yfinance statement equity 8,167bn disagreed with reported net worth",
+        "net_income": 760_259_700_000,      # 76,025.97 cr: consolidated profit after minority interest
+        "equity":     5_860_594_700_000,    # 586,059.47 cr: capital + ESOP outstanding + reserves and surplus
+        "assets":     49_080_408_400_000,   # 4,908,040.84 cr: consolidated total assets
+        "source": "HDFC Bank audited consolidated results FY2025-26 (18 Apr 2026); vendor statement "
+                  "equity and assets disagreed with the filing",
     },
 }
 
