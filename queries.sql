@@ -72,16 +72,17 @@ WHERE n = 30
 ORDER BY asset, date;
 
 -- name: q5_roe_vs_leverage
+-- name: q5_roe_vs_leverage
 SELECT
     a.name,
-    ROUND(f.roe * 100, 1)      AS roe_pct,
-    ROUND(f.debt_to_equity, 1) AS debt_to_equity,
-    CASE WHEN f.roe IS NOT NULL
-         THEN RANK() OVER (PARTITION BY f.roe IS NULL ORDER BY f.roe DESC)
-    END AS roe_rank,
-    CASE WHEN f.debt_to_equity IS NOT NULL
-         THEN RANK() OVER (PARTITION BY f.debt_to_equity IS NULL ORDER BY f.debt_to_equity ASC)
-    END AS leverage_rank
+    ROUND(f.roe * 100, 1)           AS roe_pct,
+    ROUND(f.debt_to_equity, 2)      AS debt_to_equity,
+    ROUND(f.equity_multiplier, 1)   AS equity_multiplier,
+    f.is_bank,
+    RANK() OVER (ORDER BY f.roe DESC) AS roe_rank,
+    CASE WHEN f.is_bank = 0
+         THEN RANK() OVER (PARTITION BY f.is_bank ORDER BY f.debt_to_equity ASC)
+    END AS leverage_rank_nonbanks
 FROM fundamentals f
 JOIN assets a ON a.ticker = f.asset
-ORDER BY a.name;
+ORDER BY roe_rank;

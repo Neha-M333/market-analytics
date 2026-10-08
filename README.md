@@ -1,0 +1,1 @@
+Computed ROE for TCS matched the vendor figure within two percentage points. For HDFC Bank, statement-derived equity (₹8.17tn) disagreed with both the vendor's book value per share (implying ₹6.07tn) and the company's reported net worth (₹6.08tn). I used company-reported figures for HDFC and documented the override in config.py
